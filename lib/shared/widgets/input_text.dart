@@ -4,11 +4,12 @@ import 'package:meuapp/shared/theme/app_theme.dart';
 class InputText extends StatelessWidget {
   final String label;
   final String hint;
+  final bool obscure;
 
   const InputText({
     required this.label,
     required this.hint,
-    Key? key,
+    Key? key, this.obscure = false,
   }) : super(key: key);
 
   @override
@@ -19,6 +20,7 @@ class InputText extends StatelessWidget {
         Text(label).label,
         SizedBox(height: 12),
         TextFormField(
+          obscureText: obscure,
           style: AppTheme.textStyles.input,
           decoration: InputDecoration(
             hintText: hint,
