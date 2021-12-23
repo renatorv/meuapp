@@ -31,3 +31,6 @@ https://github.com/gabuldev/flutter-race-1/tree/aula05
 
 # Figma
 https://www.figma.com/file/M60t8ulOCV7TCEYuLyrlA3/T%C3%A1-caro%3F?node-id=0%3A1
+
+# Packages
+flutter pub add validators
