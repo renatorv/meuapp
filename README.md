@@ -34,3 +34,9 @@ https://www.figma.com/file/M60t8ulOCV7TCEYuLyrlA3/T%C3%A1-caro%3F?node-id=0%3A1
 
 # Packages
 flutter pub add validators
+
+# Async
+Aula 3 => 57 minutos
+
+# Gerência de estado
+Aula 3 59 minutos
