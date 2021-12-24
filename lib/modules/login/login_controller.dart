@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-class LoginController {
+class LoginController extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
   String _email = '';
   String _password = '';
