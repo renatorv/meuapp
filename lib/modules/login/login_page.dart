@@ -14,6 +14,22 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final controller = LoginController();
+
+  @override
+  void initState() {
+    controller.addListener(
+      () {
+        controller.state.when(
+          success: (value) => print(value),
+          error: (message, _) => print(message),
+          loading: () => print('Loading...'),
+          orElse: () {},
+        );
+      },
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     // final size = MediaQuery.of(context).size;
@@ -40,14 +56,21 @@ class _LoginPageState extends State<LoginPage> {
                 hint: 'Digitel sua senha',
                 obscure: true,
                 onChanged: (value) => controller.onChange(password: value),
-                validator: (valor) =>
-                    isLength(valor, 6) ? null : 'A senha deve conter no mínimo 6 caracteres.',
+                validator: (valor) => isLength(valor, 6)
+                    ? null
+                    : 'A senha deve conter no mínimo 6 caracteres.',
               ),
-              Button(
-                label: 'Entrar',
-                onTap: () {
-                  controller.login();
-                },
+              AnimatedBuilder(
+                animation: controller,
+                builder: (_, __) => controller.state.when(
+                  loading: () => CircularProgressIndicator(),
+                  orElse: () => Button(
+                    label: 'Entrar',
+                    onTap: () {
+                      controller.login();
+                    },
+                  ),
+                ),
               ),
               Button(
                 label: 'Criar conta',
