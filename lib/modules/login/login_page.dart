@@ -14,15 +14,23 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final controller = LoginController();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     controller.addListener(
       () {
         controller.state.when(
-          success: (value) => print(value),
-          error: (message, _) => print(message),
-          loading: () => print('Loading...'),
+          success: (value) => Navigator.pushNamed(context, '/home'),
+          error: (message, _) => scaffoldKey.currentState!.showBottomSheet(
+            (context) => BottomSheet(
+              onClosing: () {},
+              builder: (context) => Container(
+                child: Text(message),
+              ),
+            ),
+          ),
+          // loading: () => print('Loading...'),
           orElse: () {},
         );
       },
@@ -31,9 +39,16 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // final size = MediaQuery.of(context).size;
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: AppTheme.colors.background,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -63,21 +78,28 @@ class _LoginPageState extends State<LoginPage> {
               AnimatedBuilder(
                 animation: controller,
                 builder: (_, __) => controller.state.when(
-                  loading: () => CircularProgressIndicator(),
-                  orElse: () => Button(
-                    label: 'Entrar',
-                    onTap: () {
-                      controller.login();
-                    },
+                  loading: () => Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: CircularProgressIndicator(),
+                  ),
+                  orElse: () => Column(
+                    children: [
+                      Button(
+                        label: 'Entrar',
+                        onTap: () {
+                          controller.login();
+                        },
+                      ),
+                      Button(
+                        label: 'Criar conta',
+                        type: ButtonType.outline,
+                        onTap: () {
+                          Navigator.pushNamed(context, "/login/create-account");
+                        },
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              Button(
-                label: 'Criar conta',
-                type: ButtonType.outline,
-                onTap: () {
-                  Navigator.pushNamed(context, "/login/create-account");
-                },
               ),
             ],
           ),

@@ -14,9 +14,37 @@ class CreateAccountPage extends StatefulWidget {
 
 class _CreateAccountPageState extends State<CreateAccountPage> {
   final controller = CreateAccountController();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    controller.addListener(() {
+      controller.state.when(
+        success: (value) => Navigator.pushNamed(context, '/home'),
+        error: (message, _) => scaffoldKey.currentState!.showBottomSheet(
+          (context) => BottomSheet(
+            onClosing: () {},
+            builder: (context) => Container(
+              child: Text(message),
+            ),
+          ),
+        ),
+        orElse: () {},
+      );
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         backgroundColor: AppTheme.colors.background,
         elevation: 0,
@@ -62,11 +90,22 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     ? null
                     : 'A senha deve conter no mínimo 6 caracteres.',
               ),
-              Button(
-                label: 'Criar conta',
-                onTap: () {
-                  controller.createAccount();
-                },
+              AnimatedBuilder(
+                animation: controller,
+                builder: (_, __) => controller.state.when(
+                  loading: () => Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(),
+                    ],
+                  ),
+                  orElse: () => Button(
+                    label: 'Criar conta',
+                    onTap: () {
+                      controller.createAccount();
+                    },
+                  ),
+                ),
               ),
             ],
           ),

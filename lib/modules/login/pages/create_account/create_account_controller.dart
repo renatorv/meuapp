@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:meuapp/shared/utils/app_state.dart';
 
-class CreateAccountController {
+class CreateAccountController extends ChangeNotifier {
+  AppState state = AppState.empty();
   final formKey = GlobalKey<FormState>();
   String _email = '';
   String _password = '';
@@ -10,7 +12,12 @@ class CreateAccountController {
     _email = email ?? _email;
     _password = password ?? _password;
     _name = name ?? _name;
-    print('email: $_email | senha: $_password | nome: $_name');
+    // print('email: $_email | senha: $_password | nome: $_name');
+  }
+
+  void update(AppState state) {
+    this.state = state;
+    notifyListeners();
   }
 
   bool validate() {
@@ -22,9 +29,16 @@ class CreateAccountController {
     return false;
   }
 
-  void createAccount() {
+  Future<void> createAccount() async {
     if (validate()) {
-      print('pode chamar o back end!!!');
+      // print('pode chamar o back end!!!');
+      try{
+        update(AppState.loading());
+        await Future.delayed(Duration(seconds: 3));
+        update(AppState.success<String>("Deu certo!!"));
+      } catch (e){
+        update(AppState.error("Não foi possível criar conta."));
+      }
     }
   }
 }
