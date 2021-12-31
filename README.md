@@ -41,3 +41,6 @@ Aula 3 => 57 minutos
 
 # Gerência de estado
 Aula 3 59 minutos
+
+# Senha projeto Supabase
+ZeoIg$Mv&QkB

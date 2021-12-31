@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:meuapp/shared/services/app_database.dart';
 import 'package:meuapp/shared/utils/app_state.dart';
 
 class LoginController extends ChangeNotifier {
@@ -33,7 +34,7 @@ class LoginController extends ChangeNotifier {
       try {
         update(AppState.loading());
         // CHAMADA DO BACK END
-        await Future.delayed(Duration(seconds: 4));
+        await AppDatabase.instance.login(email: _email, password: _password);
         update(AppState.success<String>('Usuário logado!!'));
       } catch (e) {
         update(
