@@ -1,13 +1,17 @@
 import 'package:flutter/cupertino.dart';
-import 'package:meuapp/shared/services/app_database.dart';
+
+import 'package:meuapp/modules/login/repositories/login_repository.dart';
 import 'package:meuapp/shared/utils/app_state.dart';
 
 class LoginController extends ChangeNotifier {
+  final LoginRepository repository;
+
   AppState state = AppState.empty();
 
   final formKey = GlobalKey<FormState>();
   String _email = '';
   String _password = '';
+  LoginController({required this.repository});
 
   void onChange({String? email, String? password}) {
     _email = email ?? _email;
@@ -34,7 +38,8 @@ class LoginController extends ChangeNotifier {
       try {
         update(AppState.loading());
         // CHAMADA DO BACK END
-        await AppDatabase.instance.login(email: _email, password: _password);
+        // await AppDatabase.instance.login(email: _email, password: _password);
+        await repository.login(email: _email, password: _password);
         update(AppState.success<String>('Usuário logado!!'));
       } catch (e) {
         update(

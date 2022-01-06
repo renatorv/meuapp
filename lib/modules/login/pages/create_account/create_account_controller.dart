@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
-import 'package:meuapp/shared/services/app_database.dart';
+import 'package:meuapp/modules/login/repositories/login_repository.dart';
 import 'package:meuapp/shared/utils/app_state.dart';
 
 class CreateAccountController extends ChangeNotifier {
+  final LoginRepository repository;
+  CreateAccountController({required this.repository});
   AppState state = AppState.empty();
   final formKey = GlobalKey<FormState>();
   String _email = '';
@@ -32,12 +34,13 @@ class CreateAccountController extends ChangeNotifier {
 
   Future<void> createAccount() async {
     if (validate()) {
-      // print('pode chamar o back end!!!');
-      try{
+      try {
         update(AppState.loading());
-        await AppDatabase.instance.createAccount(email: _email, password: _password, name: _name);
+        // await AppDatabase.instance
+        //     .createAccount(email: _email, password: _password, name: _name);
+        await repository.createAccount(email: _email, password: _password, name: _name);
         update(AppState.success<String>("Deu certo!!"));
-      } catch (e){
+      } catch (e) {
         update(AppState.error("Não foi possível criar conta."));
       }
     }

@@ -42,5 +42,3 @@ class SupabaseDatabase implements AppDatabase {
     return response.error == null;
   }
 }
-
-parei em 25 minutos da aula 4

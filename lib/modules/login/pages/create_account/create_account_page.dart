@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meuapp/modules/login/pages/create_account/create_account_controller.dart';
+import 'package:meuapp/modules/login/repositories/login_repository_impl.dart';
+import 'package:meuapp/shared/services/app_database.dart';
 import 'package:meuapp/shared/theme/app_theme.dart';
 import 'package:meuapp/shared/widgets/button.dart';
 import 'package:meuapp/shared/widgets/input_text.dart';
@@ -13,11 +15,14 @@ class CreateAccountPage extends StatefulWidget {
 }
 
 class _CreateAccountPageState extends State<CreateAccountPage> {
-  final controller = CreateAccountController();
+  late final controller;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
+    controller = CreateAccountController(
+        repository: LoginRepositoryImpl(AppDatabase.instance));
+
     controller.addListener(() {
       controller.state.when(
         success: (value) => Navigator.pushNamed(context, '/home'),
@@ -114,3 +119,4 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     );
   }
 }
+37 minutos
